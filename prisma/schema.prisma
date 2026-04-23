@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  mobile      String?
+  idNumber    String?
+  role        String   @default("user")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Customer {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  idNumber    String?
+  customerType String @default("private")
+  companyName String?
+  companyId   String?
+  phone       String?
+  phone2      String?
+  mobile      String?
+  fax         String?
+  email       String?
+  address     String?
+  city        String?
+  zipCode     String?
+  comments    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CarManufacturer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  models    CarModel[]
+}
+
+model CarModel {
+  id          Int      @id @default(autoincrement())
+  name        String
+  manufacturerId Int
+  manufacturer CarManufacturer @relation(fields: [manufacturerId], references: [id])
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+}
+
+model Affiliate {
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String?
+  phone     String?
+  email     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model CarTest {
+  id              Int      @id @default(autoincrement())
+  testNumber      String?  @unique
+  testDate        DateTime
+  testTime        DateTime?
+  startTime       DateTime?
+  customerId      Int
+  userId          Int
+  affiliateId     Int?
+  carNumber       String
+  manufacturerId  Int?
+  modelId         Int?
+  carType         String?
+  bodyType        String?
+  year            Int?
+  chassisNumber   String?
+  engineNumber    String?
+  km              Int?
+  roadDate        DateTime?
+  testType        String?
+  status          String   @default("open")
+  generalComments String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
